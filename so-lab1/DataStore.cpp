@@ -1,6 +1,6 @@
 #include "DataStore.h"
 
-DataStore::DataStore(unsigned short store) : Store_(store), CurrentTask_(nullptr)
+DataStore::DataStore(unsigned short store) : Store_(store), CurrentTaskValid_(false)
 {
 }
 
@@ -21,7 +21,9 @@ Task& DataStore::pop()
 	case 1:
 		return Task();
 	case 2:
-		return Task();
+		CurrentTask_ = RR_.pop();
+		CurrentTaskValid_ = true;
+		return CurrentTask_;
 	default:
 		return Task();
 	}
@@ -29,17 +31,24 @@ Task& DataStore::pop()
 
 void DataStore::done()
 {
-	if (CurrentTask_ != nullptr && Store_ == 2)
+	if (CurrentTaskValid_ && Store_ == 2)
 	{
 		std::lock_guard<std::mutex> lk(Mutex_);
+		if (!CurrentTask_.isFinished())
+		{
+			RR_.push(CurrentTask_);
+			CurrentTaskValid_ = false;
+		}
 	}
 }
 
-void DataStore::add(const Task & task)
+void DataStore::add(const Task& task)
 {
 	std::lock_guard<std::mutex> lk(Mutex_);
 
 	if (Store_ == 0)
 		FCFS_.enqueue(task);
+	else if (Store_ == 2)
+		RR_.push(task);
 	//temp
 }

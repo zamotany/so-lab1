@@ -2,6 +2,7 @@
 
 #include "Task.h"
 #include "FCFS.h"
+#include "RR.h"
 #include <mutex>
 
 class DataStore
@@ -26,8 +27,10 @@ public:
 	void add(const Task& task);
 private:
 	FCFS<Task> FCFS_;
+	RR<Task> RR_;
 	unsigned short Store_;
-	Task* CurrentTask_;
+	Task CurrentTask_;
+	bool CurrentTaskValid_;
 	std::mutex Mutex_;
 	
 };

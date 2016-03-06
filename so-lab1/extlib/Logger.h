@@ -6,20 +6,14 @@
 #include <chrono>
 #include <ctime>
 #include <iomanip>
-#include "FsMacro.h"
-#include FS_INCLUDE
+#include <filesystem>
 #include <thread>
 #include <mutex>
 #include <condition_variable>
 
-namespace sfe
-{
-	class Logger;
-}
-
 // \brief Asynchronous debug printing and loggig tool.
 // \author Paweł Trysła aka zamotany.
-class sfe::Logger
+class Logger
 {
 public:
 	// \brief Default constructor.

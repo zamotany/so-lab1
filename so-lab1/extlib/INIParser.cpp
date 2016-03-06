@@ -1,14 +1,14 @@
 #include "INIParser.h"
 
-sfe::INIParser::INIParser(const std::string& filename) : LastIndex_(0), Error_(false), Ready_(loadAndParse(filename))
+INIParser::INIParser(const std::string& filename) : LastIndex_(0), Error_(false), Ready_(loadAndParse(filename))
 {
 }
 
-sfe::INIParser::~INIParser()
+INIParser::~INIParser()
 {
 }
 
-bool sfe::INIParser::loadAndParse(const std::string& filename)
+bool INIParser::loadAndParse(const std::string& filename)
 {
 	Sections_.clear();
 	LastIndex_ = 0;
@@ -111,7 +111,7 @@ bool sfe::INIParser::loadAndParse(const std::string& filename)
 	return true;
 }
 
-bool sfe::INIParser::sectionExist(const std::string& section) const
+bool INIParser::sectionExist(const std::string& section) const
 {
 	if (Error_)
 		return false;
@@ -119,7 +119,7 @@ bool sfe::INIParser::sectionExist(const std::string& section) const
 	return Sections_.find((section.empty() ? "__global__" : section)) != Sections_.end();
 }
 
-bool sfe::INIParser::keyExist(const std::string& section, const std::string& key) const
+bool INIParser::keyExist(const std::string& section, const std::string& key) const
 {
 	if (Error_ || !sectionExist(section))
 		return false;
@@ -134,7 +134,7 @@ bool sfe::INIParser::keyExist(const std::string& section, const std::string& key
 	return false;
 }
 
-std::string sfe::INIParser::get(const std::string& section, const std::string& key, const std::string& defaultValue) const
+std::string INIParser::get(const std::string& section, const std::string& key, const std::string& defaultValue) const
 {
 	if (!Ready_ || !sectionExist(section))
 		return defaultValue;
@@ -149,44 +149,22 @@ std::string sfe::INIParser::get(const std::string& section, const std::string& k
 	return defaultValue;
 }
 
-long sfe::INIParser::getInt(const std::string& section, const std::string& key, long defaultValue) const
+long INIParser::getInt(const std::string& section, const std::string& key, long defaultValue) const
 {
 	return std::stol(get(section, key, std::to_string(defaultValue)));
 }
 
-bool sfe::INIParser::getBool(const std::string& section, const std::string& key, bool defaultValue) const
+bool INIParser::getBool(const std::string& section, const std::string& key, bool defaultValue) const
 {
 	return std::stoi(get(section, key, std::to_string(defaultValue))) == 0 ? false : true;
 }
 
-double sfe::INIParser::getFloat(const std::string& section, const std::string& key, double defaultValue) const
+double INIParser::getFloat(const std::string& section, const std::string& key, double defaultValue) const
 {
 	return (double)std::stod(get(section, key, std::to_string(defaultValue)));
 }
 
-sf::Color sfe::INIParser::getColor(const std::string& section, const std::string& key, sf::Color defaultValue) const
-{
-
-	std::string str = get(section, key, "rgba(" +
-		std::to_string(defaultValue.r) + ',' +
-		std::to_string(defaultValue.g) + ',' +
-		std::to_string(defaultValue.b) + ',' +
-		std::to_string(defaultValue.a) + ')');
-
-	str = str.substr(str.find('(') + 1, str.find(')') - str.find('(') - 1);
-
-	unsigned int r = std::stoi(str.substr(0, str.find_first_of(',')));
-	str.erase(0, str.find_first_of(',') + 1);
-	unsigned int g = std::stoi(str.substr(0, str.find_first_of(',')));
-	str.erase(0, str.find_first_of(',') + 1);
-	unsigned int b = std::stoi(str.substr(0, str.find_first_of(',')));
-	str.erase(0, str.find_first_of(',') + 1);
-	unsigned int a = std::stoi(str);
-
-	return sf::Color(r, g, b, a);
-}
-
-void sfe::INIParser::set(const std::string& section, const std::string& key, const std::string& value)
+void INIParser::set(const std::string& section, const std::string& key, const std::string& value)
 {
 	if (!Ready_)
 		return;
@@ -219,32 +197,22 @@ void sfe::INIParser::set(const std::string& section, const std::string& key, con
 		Sections_.at(str).push_back(OrderedKeyValue(appendInIndex, key, value));
 }
 
-void sfe::INIParser::setInt(const std::string& section, const std::string& key, long value)
+void INIParser::setInt(const std::string& section, const std::string& key, long value)
 {
 	set(section, key, std::to_string(value));
 }
 
-void sfe::INIParser::setBool(const std::string& section, const std::string& key, bool value)
+void INIParser::setBool(const std::string& section, const std::string& key, bool value)
 {
 	set(section, key, std::to_string(value));
 }
 
-void sfe::INIParser::setFloat(const std::string& section, const std::string& key, double value)
+void INIParser::setFloat(const std::string& section, const std::string& key, double value)
 {
 	set(section, key, std::to_string(value));
 }
 
-void sfe::INIParser::setColor(const std::string& section, const std::string& key, sf::Color value)
-{
-	set(section, key, "rgba(" + 
-		std::to_string(value.r) + ',' +
-		std::to_string(value.g) + ',' +
-		std::to_string(value.b) + ',' +
-		std::to_string(value.a) + ')'
-		);
-}
-
-bool sfe::INIParser::save()
+bool INIParser::save()
 {
 	if (Error_)
 		return false;
@@ -286,7 +254,7 @@ bool sfe::INIParser::save()
 	return true;
 }
 
-std::vector<std::string> sfe::INIParser::getKeysVector(const std::string& section) const
+std::vector<std::string> INIParser::getKeysVector(const std::string& section) const
 {
 	std::vector<std::string> output;
 

@@ -4,28 +4,18 @@
 #include <string>
 #include <vector>
 #include <map>
-#include <SFML/Graphics.hpp>
-
-namespace sfe
-{
-	class INIParser;
-}
 
 // \brief Custom INI file parser.
-// \author Pawe³ Trys³a aka zamotany.
+// \author Paweł Trysła aka zamotany.
 // \detail Parser supports keys without specified section (aka global), however
 //         they must be placed at the beginig of the file.
-//         Parser supports RGBA color, however the must be placed in rgba()
-//         wrapper: myColor=rgba(255, 0, 0, 255).
-//         WIP: HSLA colors support.
-//         WIP: Hex w/ Alpha colors support.
 // \note Comments must be placed in separate lines begining with # or ; without
 //       any other character before them.
 // \note Strings must be placed inside double quotes: myString="value".
 // \note Multiple identical keys are allowed, but get methods will return the
 //       first one found.
 // \attention Parser DOES NOT support multi-line values.
-class sfe::INIParser
+class INIParser
 {
 public:
 	// \brief Default constructor.
@@ -69,7 +59,6 @@ public:
 	long getInt(const std::string& section, const std::string& key, long defaultValue = 0) const;
 	bool getBool(const std::string& section, const std::string& key, bool defaultValue = false) const;
 	double getFloat(const std::string& section, const std::string& key, double defaultValue = 0.f) const;
-	sf::Color getColor(const std::string& section, const std::string& key, sf::Color defaultValue = sf::Color::Black) const;
 
 	// \brief Add or set value of given key in given section.
 	// \param section Name of section.
@@ -79,7 +68,6 @@ public:
 	void setInt(const std::string& section, const std::string& key, long value);
 	void setBool(const std::string& section, const std::string& key, bool value);
 	void setFloat(const std::string& section, const std::string& key, double value);
-	void setColor(const std::string& section, const std::string& key, sf::Color value);
 
 	// \brief Save data back into file.
 	// \note New keys are placed at the end of the section in the same order there were set.

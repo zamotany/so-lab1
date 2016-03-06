@@ -1,16 +1,16 @@
 #include "Random.h"
 
-sfe::Random::Random(bool allowRepeat)
+Random::Random(bool allowRepeat)
 	: AllowRepeat_(allowRepeat), PrevousNum_(-1), Seeder_(), Engine_(Seeder_())
 {
 }
 
-sfe::Random::~Random()
+Random::~Random()
 {
 }
 
 
-unsigned int sfe::Random::next()
+unsigned int Random::next()
 {
 	std::uniform_int_distribution<unsigned int> dist(0);
 
@@ -24,7 +24,7 @@ unsigned int sfe::Random::next()
 	return num;
 }
 
-int sfe::Random::nextSigned()
+int Random::nextSigned()
 {
 	std::uniform_int_distribution<int> dist(std::numeric_limits<int>::min());
 
@@ -38,7 +38,7 @@ int sfe::Random::nextSigned()
 	return num;
 }
 
-unsigned int sfe::Random::next(unsigned int min, unsigned int max)
+unsigned int Random::next(unsigned int min, unsigned int max)
 {
 	std::uniform_int_distribution<unsigned int> dist(min, max);
 
@@ -52,7 +52,7 @@ unsigned int sfe::Random::next(unsigned int min, unsigned int max)
 	return num;
 }
 
-int sfe::Random::nextSigned(int min, int max)
+int Random::nextSigned(int min, int max)
 {
 	std::uniform_int_distribution<int> dist(min, max);
 

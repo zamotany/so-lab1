@@ -9,14 +9,9 @@
 
 #include <random>
 
-namespace sfe
-{
-	class Random;
-}
-
 // \brief Class for generating random number.
 // \author Pawe³ Trys³a aka zamotany.
-class sfe::Random
+class Random
 {
 public:
 	// \breif Default constructor.

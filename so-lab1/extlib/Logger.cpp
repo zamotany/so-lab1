@@ -1,20 +1,20 @@
 #include "Logger.h"
 
-sfe::Logger::Logger(const std::string& path, unsigned int depth) :
+Logger::Logger(const std::string& path, unsigned int depth) :
 	Exit_(false), Depth_(depth),
 	Path_(path), FilenamePattern_("DebugOut.%t.txt"),
 	Worker_(&Logger::backgroundLogging, this)
 {
 }
 
-sfe::Logger::Logger(const std::string& path, const std::string& filename, unsigned int depth) :
+Logger::Logger(const std::string& path, const std::string& filename, unsigned int depth) :
 	Exit_(false), Depth_(depth),
 	Path_(path), FilenamePattern_(filename),
 	Worker_(&Logger::backgroundLogging, this)
 {
 }
 
-sfe::Logger::~Logger()
+Logger::~Logger()
 {
 	{
 		std::lock_guard<std::mutex> lk(Mutex_);
@@ -25,7 +25,7 @@ sfe::Logger::~Logger()
 		Worker_.join();
 }
 
-std::string sfe::Logger::resolveMacro(std::string macro)
+std::string Logger::resolveMacro(std::string macro)
 {
 	std::string output;
 
@@ -82,7 +82,7 @@ std::string sfe::Logger::resolveMacro(std::string macro)
 	return output;
 }
 
-std::string sfe::Logger::resolveMessage(std::string message)
+std::string Logger::resolveMessage(std::string message)
 {
 	if (message.empty())
 		return "";
@@ -100,15 +100,15 @@ std::string sfe::Logger::resolveMessage(std::string message)
 	return message;
 }
 
-void sfe::Logger::makeDir(std::string path)
+void Logger::makeDir(std::string path)
 {
-	auto dir = FS_NAMESPACE::path(path);
+	auto dir = std::tr2::sys::path(path);
 
-	if (!FS_NAMESPACE::exists(dir))
-		FS_NAMESPACE::create_directory(dir);
+	if (!std::tr2::sys::exists(dir))
+		std::tr2::sys::create_directory(dir);
 }
 
-std::string sfe::Logger::resolvePath(std::string path)
+std::string Logger::resolvePath(std::string path)
 {
 	if (path[0] == '/')
 		path = path.substr(1);
@@ -119,12 +119,12 @@ std::string sfe::Logger::resolvePath(std::string path)
 	return path;
 }
 
-void sfe::Logger::setDepth(unsigned int depth)
+void Logger::setDepth(unsigned int depth)
 {
 	Depth_ = depth;
 }
 
-sfe::Logger& sfe::Logger::out(const std::string& message, unsigned int depth)
+Logger& Logger::out(const std::string& message, unsigned int depth)
 {
 	if(Depth_ < depth)
 		return *this;
@@ -136,7 +136,7 @@ sfe::Logger& sfe::Logger::out(const std::string& message, unsigned int depth)
 	return *this;
 }
 
-void sfe::Logger::abort(const std::string& message)
+void Logger::abort(const std::string& message)
 {
 	out(message, 0);
 	{
@@ -149,7 +149,7 @@ void sfe::Logger::abort(const std::string& message)
 	std::abort();
 }
 
-void sfe::Logger::backgroundLogging()
+void Logger::backgroundLogging()
 {
 	if (FilenamePattern_.empty())
 		FilenamePattern_ = "DebugOut.%t.txt";

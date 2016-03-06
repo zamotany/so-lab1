@@ -1,13 +1,14 @@
 #pragma once
 
 #include "Task.h"
+#include "FCFS.h"
 #include <mutex>
 
 class DataStore
 {
 public:
 	// \brief Default constructor.
-	// \param store Storing mechanism.
+	// \param store Storing mechanism (0 - FCFS, 1 - SJF, 2 - RR).
 	DataStore(unsigned short store);
 
 	// \brief Default destructor.
@@ -30,7 +31,7 @@ public:
 	// \param task Element to add.
 	void add(const Task& task);
 private:
-	//storing mechanisms
+	FCFS<Task> FCFS_;
 	unsigned short Store_;
 	std::mutex Mutex_;
 	

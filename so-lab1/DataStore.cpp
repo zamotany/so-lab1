@@ -1,6 +1,6 @@
 #include "DataStore.h"
 
-DataStore::DataStore(unsigned short store) : Store_(store)
+DataStore::DataStore(unsigned short store) : Store_(store), CurrentTask_(nullptr)
 {
 }
 
@@ -8,25 +8,37 @@ DataStore::~DataStore()
 {
 }
 
-Task* DataStore::top()
+Task& DataStore::pop()
 {
-	if (Store_ == 0)
-		return nullptr;
+	std::lock_guard<std::mutex> lk(Mutex_);
+
+	switch (Store_)
+	{
+	case 0:
+		Task task;
+		FCFS_.dequeue(task);
+		return task;
+	case 1:
+		return Task();
+	case 2:
+		return Task();
+	default:
+		return Task();
+	}
 }
 
-void DataStore::remove(Task * task)
+void DataStore::done()
 {
-	if (Store_ == 0)
-		return;
-}
-
-Task DataStore::pop()
-{
-	return Task(); //TEMP
+	if (CurrentTask_ != nullptr && Store_ == 2)
+	{
+		std::lock_guard<std::mutex> lk(Mutex_);
+	}
 }
 
 void DataStore::add(const Task & task)
 {
+	std::lock_guard<std::mutex> lk(Mutex_);
+
 	if (Store_ == 0)
 		FCFS_.enqueue(task);
 	//temp

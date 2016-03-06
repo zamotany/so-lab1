@@ -15,17 +15,11 @@ public:
 	~DataStore();
 
 	// \brief Get next element.
-	// \note Does not remove returned element.
-	// \return Pointer to element.
-	Task* top();
+	// \return Referenece to element.
+	Task& pop();
 
-	// \brief Remove specified element if present.
-	// \param Pointer to element to remove.
-	void remove(Task* task);
-
-	// \brief Get next element and remove it from data store.
-	// \return Element.
-	Task pop();
+	// \brief Signalize end of time quant in RR.
+	void done();
 	
 	// \brief Add element to data store.
 	// \param task Element to add.
@@ -33,6 +27,7 @@ public:
 private:
 	FCFS<Task> FCFS_;
 	unsigned short Store_;
+	Task* CurrentTask_;
 	std::mutex Mutex_;
 	
 };

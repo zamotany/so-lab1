@@ -6,13 +6,13 @@
 class Task
 {
 private:
-	int time;			//! \var Time needed to process the task.
-	int currentState;	//! \var Current state of the task processing (time procesor spend on task).
+	unsigned long time;			//! \var Time needed to process the task.
+	unsigned long currentState;	//! \var Current state of the task processing (time procesor spend on task).
 public:
-	Task() { time = currentState = 0; }								//! \fn 
-	void setTime(int value) { time = value; }
+	Task() { time = currentState = 0L; }								//! \fn 
+	void setTime(unsigned long value) { time = value; }
 	bool isFinished() const { return !(currentState <= time); }
-	void setCurrentState(int value) { currentState = value; }
-	int getCurrentState() const { return currentState; }
-	void reset() { currentState = 0; }
+	void setCurrentState(unsigned long value) { currentState = value; }
+	unsigned long getCurrentState() const { return currentState; }
+	void reset() { currentState = 0L; }
 };

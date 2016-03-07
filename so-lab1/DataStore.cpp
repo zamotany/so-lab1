@@ -12,21 +12,24 @@ Task& DataStore::pop()
 {
 	std::lock_guard<std::mutex> lk(Mutex_);
 
+	Task task;
+
 	switch (Store_)
 	{
 	case 0:
-		Task task;
 		FCFS_.dequeue(task);
-		return task;
+		break;
 	case 1:
-		return Task();
+		break;
 	case 2:
 		CurrentTask_ = RR_.pop();
 		CurrentTaskValid_ = true;
-		return CurrentTask_;
+		break;
 	default:
-		return Task();
+		break;
 	}
+
+	return task;
 }
 
 void DataStore::done()
@@ -46,9 +49,17 @@ void DataStore::add(const Task& task)
 {
 	std::lock_guard<std::mutex> lk(Mutex_);
 
-	if (Store_ == 0)
+	switch (Store_)
+	{
+	case 0:
 		FCFS_.enqueue(task);
-	else if (Store_ == 2)
+		break;
+	case 1:
+		break;
+	case 2:
 		RR_.push(task);
-	//temp
+		break;
+	default:
+		break;
+	}
 }

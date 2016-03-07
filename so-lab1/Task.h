@@ -6,8 +6,11 @@
 class Task
 {
 private:
-	unsigned long time;			// \var Time needed to process the task.
-	unsigned long currentState;	// \var Current state of the task processing (time procesor spend on task).
+	// \var Time needed to process the task.
+	unsigned long time;
+	
+	// \var Current state of the task processing (time procesor spend on task).
+	unsigned long currentState;
 public:
 	// \brief Default constructor.
 	Task() { time = currentState = 0L; }

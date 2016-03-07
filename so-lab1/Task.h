@@ -16,12 +16,16 @@ public:
 	// \param time required to process task.
 	void setTime(unsigned long value) { time = value; }
 
+	// \brief Returns time needed to process task.
+	// \return Time needed to process task.
+	unsigned long getTime() const { return time; }
+
 	// \brief Checks if task is finished.
 	// \return True if task is finished, false otherwise.
 	bool isFinished() const { return !(currentState <= time); }
 
 	// \brief Sets current state of task (time that task was processed).
-	// \param current state of task.
+	// \param Current state of task.
 	void setCurrentState(unsigned long value) { currentState = value; }
 
 	// \brief Returns current state of task.

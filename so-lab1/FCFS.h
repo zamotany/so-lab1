@@ -73,7 +73,7 @@ bool FCFS<Item>::dequeue(Item & item)
 	item = front->item;
 	--items;
 	Node * temp = front;
-	front = front - next;
+	front = front->next;
 	delete temp;
 
 	if (items == 0)

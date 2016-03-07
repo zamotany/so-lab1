@@ -23,6 +23,20 @@ int Program::exec()
 {
 	Worker_ = std::thread(&Program::WorkerTask_, this);
 
+	bool isRR = Config_.getInt("DS", "Mechanism", 0) == 2;
+	unsigned long tasksToExecute = Config_.getInt("CPU", "TasksToExecute", 0);
+
+	if (isRR)
+		CPU_.setRoundRobin(Config_.getInt("CPU", "TimeQuant", 1));
+
+	while (tasksToExecute > 0)
+	{
+		Task task = DS_.pop();
+		CPU_.execute(task);
+		DS_.done();
+		tasksToExecute--;
+	}
+
 	return 0;
 }
 
@@ -30,7 +44,7 @@ void Program::WorkerTask_()
 {
 	bool exit = false;
 	std::chrono::time_point<std::chrono::system_clock> start, end;
-	sfe::Random rand;
+	Random rand;
 
 	while (!exit)
 	{

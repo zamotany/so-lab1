@@ -32,7 +32,10 @@ bool SJF::enqueue(const Task & item)
 	do {
 		if (item.getTime() >= add->next->item.getTime())
 		{
-			add->next = add->next->next;
+			Node * temp = new Node;
+			temp = add->next;
+			add->next->next = add;
+			add->next = temp->next;
 		}
 		else break;
 

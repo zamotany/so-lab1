@@ -25,18 +25,23 @@ int Program::exec()
 
 	bool isRR = Config_.getInt("DS", "Mechanism", 0) == 2;
 	unsigned long tasksToExecute = Config_.getInt("CPU", "TasksToExecute", 0);
+	unsigned long timeQuant = Config_.getInt("CPU", "TimeQuant", 1);
 
 	if (isRR)
-		CPU_.setRoundRobin(Config_.getInt("CPU", "TimeQuant", 1));
+		CPU_.setRoundRobin(timeQuant);
 
 	while (tasksToExecute > 0)
 	{
 		Task task = DS_.pop();
-		CPU_.execute(task);
-		DS_.done();
-		tasksToExecute--;
+		if (task.getTime() != 0)
+		{
+			std::cout << "New task: " << task.getTime() << " status: " << task.getCurrentState() << std::endl;
+			CPU_.execute(task);
+			DS_.done(timeQuant);
+			tasksToExecute--;
+		}
 	}
-
+	std::cin.get();
 	return 0;
 }
 
@@ -55,6 +60,7 @@ void Program::WorkerTask_()
 			Task task;
 			task.setTime(rand.next(MinTaskDuration_, MaxTaskDuration_));
 			DS_.add(task);
+			//std::cout << "New task: " << task.getTime() << std::endl;
 
 			Accumulator_ = std::chrono::milliseconds::zero();
 		}

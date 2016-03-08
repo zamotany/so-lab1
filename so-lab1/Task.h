@@ -1,5 +1,7 @@
 #pragma once
 
+#include <chrono>
+
 // \brief A Task class.
 // \details A class representing procesor task.
 
@@ -11,6 +13,7 @@ private:
 	
 	// \var Current state of the task processing (time procesor spend on task).
 	unsigned long currentState;
+
 public:
 	// \brief Default constructor.
 	Task() { time = currentState = 0L; }
@@ -42,4 +45,7 @@ public:
 
 	// \brief Resets current state of task (Sets time that task was processed).
 	void reset() { currentState = 0L; }
+
+	std::chrono::system_clock::time_point ArrivalTime;
+	std::chrono::system_clock::time_point ExecutionTime;
 };

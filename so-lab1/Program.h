@@ -9,6 +9,7 @@
 #include "Processor.h"
 #include "extlib\Random.h"
 #include "extlib\INIParser.h"
+#include "extlib\Logger.h"
 
 class Program
 {
@@ -31,10 +32,13 @@ private:
 	std::condition_variable BreakCond_;
 
 	INIParser Config_;
+	Logger Log_;
 	DataStore DS_;
 	Processor CPU_;
 	std::chrono::milliseconds Interval_;
 	std::chrono::duration<double> Accumulator_;
 	unsigned long MinTaskDuration_;
 	unsigned long MaxTaskDuration_;
+	unsigned long ExecutedTasks_;
+	double AvgAwaitTime_;
 };

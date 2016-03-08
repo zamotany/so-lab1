@@ -39,7 +39,7 @@ Task& DataStore::pop()
 	return task;
 }
 
-void DataStore::done(unsigned int timeQuant)
+bool DataStore::done(unsigned int timeQuant)
 {
 	if (CurrentTaskValid_ && Store_ == 2)
 	{
@@ -49,8 +49,10 @@ void DataStore::done(unsigned int timeQuant)
 			CurrentTask_.setCurrentState(timeQuant);
 			RR_.push(CurrentTask_);
 			CurrentTaskValid_ = false;
+			return false;
 		}
 	}
+	return true;
 }
 
 void DataStore::add(const Task& task)

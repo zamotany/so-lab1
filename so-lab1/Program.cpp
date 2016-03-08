@@ -1,11 +1,13 @@
 #include "Program.h"
 
-Program::Program(const std::string config) : Exit_(false), Config_(config), DS_(Config_.getInt("DS", "Mechanism", 0))
+Program::Program(const std::string config) : Exit_(false), Config_(config), DS_(Config_.getInt("DS", "Mechanism", 0)),
+	Log_("out", "Analysis.%t.csv"), ExecutedTasks_(0), AvgAwaitTime_(0)
 {
 	Interval_ = std::chrono::milliseconds(Config_.getInt("Generator", "Interval", 1000));
 	Accumulator_ = std::chrono::milliseconds::zero();
 	MinTaskDuration_ = Config_.getInt("Generator", "MinTaskDuration", 1);
 	MaxTaskDuration_ = Config_.getInt("Generator", "MaxTaskDuration", 1000000000);
+	Log_.out("ArrivalTime,ExecutionTime,AwaitingTime,ExecutionDuration,AverageAwaitingTime");
 }
 
 Program::~Program()
@@ -36,9 +38,21 @@ int Program::exec()
 		if (task.getTime() != 0)
 		{
 			std::cout << "New task: " << task.getTime() << " status: " << task.getCurrentState() << std::endl;
+			task.ExecutionTime = std::chrono::system_clock::now();
 			CPU_.execute(task);
-			DS_.done(timeQuant);
-			tasksToExecute--;
+			if (DS_.done(timeQuant))
+				tasksToExecute--;
+			std::string str = std::to_string(
+				std::chrono::duration_cast<std::chrono::milliseconds>(task.ArrivalTime.time_since_epoch()).count()) + ',';
+			str += std::to_string(
+				std::chrono::duration_cast<std::chrono::milliseconds>(task.ExecutionTime.time_since_epoch()).count()) + ',';
+			str += std::to_string(
+				std::chrono::duration_cast<std::chrono::milliseconds>(task.ExecutionTime - task.ArrivalTime).count()) + ',';
+			str += std::to_string(task.getTime()) + ',';
+			ExecutedTasks_++;
+			AvgAwaitTime_ += std::chrono::duration_cast<std::chrono::milliseconds>(task.ExecutionTime - task.ArrivalTime).count();
+			str += std::to_string(AvgAwaitTime_ / (double)ExecutedTasks_) + ',';
+			Log_.out(str);
 		}
 	}
 	std::cin.get();
@@ -59,8 +73,8 @@ void Program::WorkerTask_()
 		{
 			Task task;
 			task.setTime(rand.next(MinTaskDuration_, MaxTaskDuration_));
+			task.ArrivalTime = std::chrono::system_clock::now();
 			DS_.add(task);
-			//std::cout << "New task: " << task.getTime() << std::endl;
 
 			Accumulator_ = std::chrono::milliseconds::zero();
 		}

@@ -3,6 +3,7 @@
 #include "Task.h"
 #include "FCFS.h"
 #include "RR.h"
+#include "SJF.h"
 #include <mutex>
 
 class DataStore
@@ -20,7 +21,8 @@ public:
 	Task& pop();
 
 	// \brief Signalize end of time quant in RR.
-	void done();
+	// \param timeQuant Quant of time used in RR.
+	void done(unsigned int timeQuant);
 	
 	// \brief Add element to data store.
 	// \param task Element to add.
@@ -28,6 +30,8 @@ public:
 private:
 	FCFS<Task> FCFS_;
 	RR<Task> RR_;
+	SJF SJF_;
+
 	unsigned short Store_;
 	Task CurrentTask_;
 	bool CurrentTaskValid_;

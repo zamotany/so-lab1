@@ -20,6 +20,13 @@ public:
 		Store_.pop();
 		return item;
 	}
+
+	// \brief Checks if store is empty.
+	// \return True if store is empty, false otherwise.
+	bool isEmpty() const
+	{
+		return Store_.size() == 0;
+	}
 private:
 	std::queue<T> Store_;
 };

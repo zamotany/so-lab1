@@ -3,8 +3,10 @@
 #include <thread>
 #include <mutex>
 #include <condition_variable>
+#include <iostream>
 #include "DataStore.h"
 #include "Task.h"
+#include "Processor.h"
 #include "extlib\Random.h"
 #include "extlib\INIParser.h"
 
@@ -28,8 +30,9 @@ private:
 	std::thread Worker_;
 	std::condition_variable BreakCond_;
 
-	sfe::INIParser Config_;
+	INIParser Config_;
 	DataStore DS_;
+	Processor CPU_;
 	std::chrono::milliseconds Interval_;
 	std::chrono::duration<double> Accumulator_;
 	unsigned long MinTaskDuration_;

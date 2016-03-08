@@ -12,30 +12,41 @@ Task& DataStore::pop()
 {
 	std::lock_guard<std::mutex> lk(Mutex_);
 
+	Task task;
+
 	switch (Store_)
 	{
 	case 0:
-		Task task;
-		FCFS_.dequeue(task);
-		return task;
+		if(!FCFS_.isEmpty())
+			FCFS_.dequeue(task);
+		break;
 	case 1:
-		return Task();
+		if(!SJF_.isEmpty())
+			SJF_.dequeue(task);
+		break;
 	case 2:
-		CurrentTask_ = RR_.pop();
-		CurrentTaskValid_ = true;
-		return CurrentTask_;
+		if (!RR_.isEmpty())
+		{
+			CurrentTask_ = RR_.pop();
+			CurrentTaskValid_ = true;
+			task = CurrentTask_;
+		}
+		break;
 	default:
-		return Task();
+		break;
 	}
+
+	return task;
 }
 
-void DataStore::done()
+void DataStore::done(unsigned int timeQuant)
 {
 	if (CurrentTaskValid_ && Store_ == 2)
 	{
 		std::lock_guard<std::mutex> lk(Mutex_);
 		if (!CurrentTask_.isFinished())
 		{
+			CurrentTask_.setCurrentState(timeQuant);
 			RR_.push(CurrentTask_);
 			CurrentTaskValid_ = false;
 		}
@@ -46,9 +57,18 @@ void DataStore::add(const Task& task)
 {
 	std::lock_guard<std::mutex> lk(Mutex_);
 
-	if (Store_ == 0)
+	switch (Store_)
+	{
+	case 0:
 		FCFS_.enqueue(task);
-	else if (Store_ == 2)
+		break;
+	case 1:
+		SJF_.enqueue(task);
+		break;
+	case 2:
 		RR_.push(task);
-	//temp
+		break;
+	default:
+		break;
+	}
 }

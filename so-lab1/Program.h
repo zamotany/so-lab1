@@ -40,5 +40,5 @@ private:
 	unsigned long MinTaskDuration_;
 	unsigned long MaxTaskDuration_;
 	unsigned long ExecutedTasks_;
-	unsigned long long AvgAwaitTime_;
+	double AvgAwaitTime_;
 };

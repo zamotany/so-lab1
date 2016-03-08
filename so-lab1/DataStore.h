@@ -22,7 +22,8 @@ public:
 
 	// \brief Signalize end of time quant in RR.
 	// \param timeQuant Quant of time used in RR.
-	void done(unsigned int timeQuant);
+	// \return True if task was completed, false otherwise.
+	bool done(unsigned int timeQuant);
 	
 	// \brief Add element to data store.
 	// \param task Element to add.

@@ -1,7 +1,7 @@
 #include "Program.h"
 
 Program::Program(const std::string config) : Exit_(false), Config_(config), DS_(Config_.getInt("DS", "Mechanism", 0)),
-	Log_("out", "Analysis.csv")
+	Log_("out", "Analysis.%t.csv"), ExecutedTasks_(0), AvgAwaitTime_(0)
 {
 	Interval_ = std::chrono::milliseconds(Config_.getInt("Generator", "Interval", 1000));
 	Accumulator_ = std::chrono::milliseconds::zero();
@@ -40,7 +40,8 @@ int Program::exec()
 			std::cout << "New task: " << task.getTime() << " status: " << task.getCurrentState() << std::endl;
 			task.ExecutionTime = std::chrono::system_clock::now();
 			CPU_.execute(task);
-			DS_.done(timeQuant);
+			if (DS_.done(timeQuant))
+				tasksToExecute--;
 			std::string str = std::to_string(
 				std::chrono::duration_cast<std::chrono::milliseconds>(task.ArrivalTime.time_since_epoch()).count()) + ',';
 			str += std::to_string(
@@ -50,9 +51,8 @@ int Program::exec()
 			str += std::to_string(task.getTime()) + ',';
 			ExecutedTasks_++;
 			AvgAwaitTime_ += std::chrono::duration_cast<std::chrono::milliseconds>(task.ExecutionTime - task.ArrivalTime).count();
-			str += std::to_string(double(AvgAwaitTime_ / ExecutedTasks_)) + ',';
+			str += std::to_string(AvgAwaitTime_ / (double)ExecutedTasks_) + ',';
 			Log_.out(str);
-			tasksToExecute--;
 		}
 	}
 	std::cin.get();
@@ -75,7 +75,6 @@ void Program::WorkerTask_()
 			task.setTime(rand.next(MinTaskDuration_, MaxTaskDuration_));
 			task.ArrivalTime = std::chrono::system_clock::now();
 			DS_.add(task);
-			//std::cout << "New task: " << task.getTime() << std::endl;
 
 			Accumulator_ = std::chrono::milliseconds::zero();
 		}

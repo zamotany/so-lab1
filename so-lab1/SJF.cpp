@@ -2,7 +2,7 @@
 
 SJF::SJF()
 {
-	front  = nullptr;
+	front = nullptr;
 	items = 0;
 }
 
@@ -21,26 +21,44 @@ bool SJF::enqueue(const Task & item)
 {
 	Node * add = new Node;
 	add->item = item;
-	add->next = front;
+	add->next = nullptr;
 	++items;
 
-	if (add->next = nullptr) {
+	if (front == nullptr)
+	{
 		front = add;
-		return true;
+		return false;
 	}
-
-	do {
-		if (item.getTime() >= add->next->item.getTime())
+	else
+	{
+		Node* temp = front;
+		Node* prev = nullptr;
+		Node* next = nullptr;
+		do
 		{
-			Node * temp = new Node;
-			temp = add->next;
-			add->next->next = add;
-			add->next = temp->next;
-		}
-		else break;
+			if (item.getTime() <= temp->item.getTime())
+				break;
 
-	} while (add->next != nullptr);
-	
+			prev = temp;
+			next = temp->next;
+
+			temp = temp->next;
+		} while (temp != nullptr);
+		if (prev == nullptr)
+		{
+			add->next = front;
+			front = add;
+		}
+		else if(next == nullptr)
+		{
+			prev->next = add;
+		}
+		else
+		{
+			prev->next = add;
+			add->next = next;
+		}
+	}	
 	return true;
 }
 

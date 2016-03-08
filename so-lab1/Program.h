@@ -3,6 +3,7 @@
 #include <thread>
 #include <mutex>
 #include <condition_variable>
+#include <iostream>
 #include "DataStore.h"
 #include "Task.h"
 #include "Processor.h"

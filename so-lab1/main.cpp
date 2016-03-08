@@ -1,7 +1,7 @@
-#include <iostream>
+#include "Program.h"
 
 int main()
 {
-	
-	return EXIT_SUCCESS;
+	Program app("config.ini");
+	return app.exec();
 }

@@ -25,11 +25,16 @@ public:
 
 	// \brief Checks if task is finished.
 	// \return True if task is finished, false otherwise.
-	bool isFinished() const { return !(currentState <= time); }
+	bool isFinished() const { return currentState >= time; }
 
 	// \brief Sets current state of task (time that task was processed).
 	// \param Current state of task.
-	void setCurrentState(unsigned long value) { currentState = value; }
+	void setCurrentState(unsigned long value)
+	{
+		currentState += value;
+		if (currentState > time)
+			currentState = time;
+	}
 
 	// \brief Returns current state of task.
 	// \return Current state of task.

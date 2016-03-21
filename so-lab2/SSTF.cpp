@@ -2,41 +2,41 @@
 
 SSTF::SSTF(unsigned int headPosition)
 {
-	_headPosition = headPosition;
-	_size = 0;
-	_array = nullptr;
+	m_headPosition = headPosition;
+	m_size = 0;
+	m_array = nullptr;
 }
 
 void SSTF::load(const unsigned int * arr, size_t size)
 {
-	_size = size;
-	_array = new unsigned int[_size];
+	m_size = size;
+	m_array = new unsigned int[m_size];
 	
-	for (size_t i = 0; i < _size; ++i)
-		_array[i] = arr[i];
+	for (size_t i = 0; i < m_size; ++i)
+		m_array[i] = arr[i];
 }
 
 unsigned int SSTF::getNext()
 {
-	unsigned int min = std::abs((long)_headPosition - (long)_array[0]);
+	unsigned int min = std::abs((long)m_headPosition - (long)m_array[0]);
 
 	size_t index = 0;
-	for (size_t i = 1; i < _size; ++i)
-		if ((unsigned int)std::abs((long)_headPosition - (long)_array[i]) < min)
+	for (size_t i = 1; i < m_size; ++i)
+		if ((unsigned int)std::abs((long)m_headPosition - (long)m_array[i]) < min)
 		{
-			min = std::abs((long)_headPosition - (long)_array[i]);
-			_headPosition = _array[i];
+			min = std::abs((long)m_headPosition - (long)m_array[i]);
+			m_headPosition = m_array[i];
 			index = i;
 		}
-	if (index == 0) _headPosition = _array[0];
-	--_size;
-	for (size_t i = index; i < _size; ++i)
-		_array[i] = _array[i + 1];
+	if (index == 0) m_headPosition = m_array[0];
+	--m_size;
+	for (size_t i = index; i < m_size; ++i)
+		m_array[i] = m_array[i + 1];
 
-	return _headPosition;
+	return m_headPosition;
 }
 
 SSTF::~SSTF()
 {
-	delete[] _array;
+	delete[] m_array;
 }

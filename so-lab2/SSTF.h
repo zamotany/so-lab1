@@ -7,13 +7,13 @@ class SSTF
 {
 private:
 	// \var Actual position of the virtual disk head.
-	unsigned int _headPosition;
+	unsigned int m_headPosition;
 
 	// \var Pointer to the array of next positions.
-	unsigned int * _array;
+	unsigned int * m_array;
 
 	// \var Size of the array.
-	size_t _size;
+	size_t m_size;
 public:
 	// \brief Default constructor.
 	// \param headPosition Initial position of the head, 0 by default.
@@ -21,7 +21,7 @@ public:
 	
 	// \brief Sets head on the given position.
 	// \param newPosition New position of the head.
-	void setHeadPosition(unsigned int newPosition) { _headPosition = newPosition; }
+	void setHeadPosition(unsigned int newPosition) { m_headPosition = newPosition; }
 
 	// \brief Load an array of next positions of the head.
 	// \param arr          Pointer to an array.
